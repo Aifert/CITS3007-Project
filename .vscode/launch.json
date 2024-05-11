@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "lldb",
+      "request": "launch",
+      "args": [],
+      "cwd": "/Users/aifertsmacbookpro/Desktop/DESKTOP/UNI WORK/Year 3 Sem 1/CITS3007/CITS3007-Project",
+      "program": "/Users/aifertsmacbookpro/Desktop/DESKTOP/UNI WORK/Year 3 Sem 1/CITS3007/CITS3007-Project/build/Debug/outDebug"
+    }
+  ]
+}

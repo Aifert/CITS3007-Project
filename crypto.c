@@ -2,8 +2,16 @@
 #include <string.h>
 #include <stdlib.h>
 #include "crypto.h"
+#include "helper.h"
 
 void caesar_encrypt(char range_low, char range_high, int key, const char *plain_text, char *cipher_text) {
+    // Check for null pointers
+    check_null_pointer(plain_text);
+    check_null_pointer(cipher_text);
+
+    // Check for buffer overflow
+    check_buffer_size(plain_text, cipher_text);
+
     int range = range_high - range_low + 1;
     for (int i = 0; plain_text[i]; i++) {
         if (plain_text[i] >= range_low && plain_text[i] <= range_high) {
@@ -15,10 +23,33 @@ void caesar_encrypt(char range_low, char range_high, int key, const char *plain_
 }
 
 void caesar_decrypt(char range_low, char range_high, int key, const char *cipher_text, char *plain_text) {
-    caesar_encrypt(range_low, range_high, -key, cipher_text, plain_text);
+    // Check for null pointers
+    check_null_pointer(plain_text);
+    check_null_pointer(cipher_text);
+
+    // Check for buffer overflow
+    check_buffer_size(plain_text, cipher_text);
+
+    int range = range_high - range_low + 1;
+    for (int i = 0; cipher_text[i]; i++) {
+        if (cipher_text[i] >= range_low && cipher_text[i] <= range_high) {
+            int decrypted = ((cipher_text[i] - range_low - key) % range);
+            if (decrypted < 0) decrypted += range;
+            plain_text[i] = decrypted + range_low;
+        } else {
+            plain_text[i] = cipher_text[i];
+        }
+    }
 }
 
 void vigenere_encrypt(char range_low, char range_high, const char *key, const char *plain_text, char *cipher_text) {
+    // Check for null pointers
+    check_null_pointer(plain_text);
+    check_null_pointer(cipher_text);
+
+    // Check for buffer overflow
+    check_buffer_size(plain_text, cipher_text);
+
     int range = range_high - range_low + 1;
     int key_length = strlen(key);
     for (int i = 0; plain_text[i]; i++) {
@@ -32,6 +63,13 @@ void vigenere_encrypt(char range_low, char range_high, const char *key, const ch
 }
 
 void vigenere_decrypt(char range_low, char range_high, const char *key, const char *cipher_text, char *plain_text) {
+    // Check for null pointers
+    check_null_pointer(plain_text);
+    check_null_pointer(cipher_text);
+
+    // Check for buffer overflow
+    check_buffer_size(plain_text, cipher_text);
+
     int key_length = strlen(key);
     for (int i = 0; cipher_text[i]; i++) {
         if (cipher_text[i] >= range_low && cipher_text[i] <= range_high) {
@@ -43,19 +81,6 @@ void vigenere_decrypt(char range_low, char range_high, const char *key, const ch
     }
 }
 
-/**
- * @brief Command-line interface for encryption and decryption operations.
- *
- * This function takes command-line arguments and performs the specified operation.
- * The first argument should be the operation to perform: "caesar-encrypt", "caesar-decrypt",
- * "vigenere-encrypt", or "vigenere-decrypt". The second argument is the key, which is an integer
- * for Caesar cipher operations and a string for Vigenère cipher operations. The third argument is
- * the message to encrypt or decrypt.
- *
- * @param argc The number of command-line arguments.
- * @param argv The command-line arguments.
- * @return int Returns 0 if the operation was successful, or 1 if there was an error.
- */
 int cli(int argc, char **argv) {
     if (argc != 4) {
         fprintf(stderr, "Invalid number of arguments\n");
@@ -81,6 +106,5 @@ int cli(int argc, char **argv) {
         return 1;
     }
 
-    printf("%s\n", result);
     return 0;
 }

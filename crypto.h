@@ -10,7 +10,7 @@
   * same position in `cipher_text`. If the `plain_text` character is outside the range,
   * then the corresponding character is not encrypted: exactly the same character should
   * be written to exactly the same position in `cipher_text`. If the `plain_text`
-  * character is within the range, it should be encrypted using the Caesar cipher:  
+  * character is within the range, it should be encrypted using the Caesar cipher:
   * a new character is obtained by shifting it by `key` positions (modulo the size of the
   * range).
   *
@@ -127,7 +127,18 @@ void vigenere_encrypt(char range_low, char range_high, const char *key,
   */
 void vigenere_decrypt(char range_low, char range_high, const char * key, const char * cipher_text, char * plain_text);
 
-/** TODO
+/**
+ * @brief Command-line interface for encryption and decryption operations.
+ *
+ * This function takes command-line arguments and performs the specified operation.
+ * The first argument should be the operation to perform: "caesar-encrypt", "caesar-decrypt",
+ * "vigenere-encrypt", or "vigenere-decrypt". The second argument is the key, which is an integer
+ * for Caesar cipher operations and a string for Vigenère cipher operations. The third argument is
+ * the message to encrypt or decrypt.
+ *
+ * @param argc The number of command-line arguments.
+ * @param argv The command-line arguments.
+ * @return int Returns 0 if the operation was successful, or 1 if there was an error.
  */
 int cli(int argc, char ** argv);
 

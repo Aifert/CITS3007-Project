@@ -1,15 +1,15 @@
 CC=gcc
-CFLAGS=-I.
+CFLAGS=-I. -D_FORTIFY_SOURCE=2 -fstack-protector-strong -Wl,-z,relro,-z,now -Wl,-z,noexecstack -fPIE -pie -Wformat -Wformat-security -Werror=format-security
 DEPS = cli.h
-OBJ = main.o test.o
+OBJ = crypto.o test.o helper.o
 
 %.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-main: $(OBJ)
+crypto: $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS)
 
 .PHONY: clean
 
 clean:
-	rm -f *.o main
+	rm -f *.o crypto

@@ -5,12 +5,14 @@
 #include "helper.h"
 
 void caesar_encrypt(char range_low, char range_high, int key, const char *plain_text, char *cipher_text) {
+    // Check for null terminated
+    is_null_terminated(plain_text);
+
     // Check for null pointers
     check_null_pointer(plain_text);
     check_null_pointer(cipher_text);
 
-    // Check for buffer overflow
-    check_buffer_size(plain_text, cipher_text);
+    cipher_text[strlen(plain_text)] = '\0';
 
     int range = range_high - range_low + 1;
     for (int i = 0; plain_text[i]; i++) {
@@ -23,12 +25,14 @@ void caesar_encrypt(char range_low, char range_high, int key, const char *plain_
 }
 
 void caesar_decrypt(char range_low, char range_high, int key, const char *cipher_text, char *plain_text) {
+    // Check for null terminated
+    is_null_terminated(plain_text);
+
     // Check for null pointers
     check_null_pointer(plain_text);
     check_null_pointer(cipher_text);
 
-    // Check for buffer overflow
-    check_buffer_size(plain_text, cipher_text);
+    plain_text[strlen(plain_text)] = '\0';
 
     int range = range_high - range_low + 1;
     for (int i = 0; cipher_text[i]; i++) {
@@ -43,12 +47,14 @@ void caesar_decrypt(char range_low, char range_high, int key, const char *cipher
 }
 
 void vigenere_encrypt(char range_low, char range_high, const char *key, const char *plain_text, char *cipher_text) {
+    // Check for null terminated
+    is_null_terminated(plain_text);
+
     // Check for null pointers
     check_null_pointer(plain_text);
     check_null_pointer(cipher_text);
 
-    // Check for buffer overflow
-    check_buffer_size(plain_text, cipher_text);
+    cipher_text[strlen(plain_text)] = '\0';
 
     int range = range_high - range_low + 1;
     int key_length = strlen(key);
@@ -63,12 +69,14 @@ void vigenere_encrypt(char range_low, char range_high, const char *key, const ch
 }
 
 void vigenere_decrypt(char range_low, char range_high, const char *key, const char *cipher_text, char *plain_text) {
+    // Check for null terminated
+    is_null_terminated(plain_text);
+
     // Check for null pointers
     check_null_pointer(plain_text);
     check_null_pointer(cipher_text);
 
-    // Check for buffer overflow
-    check_buffer_size(plain_text, cipher_text);
+    plain_text[strlen(plain_text)] = '\0';
 
     int key_length = strlen(key);
     for (int i = 0; cipher_text[i]; i++) {
@@ -92,11 +100,7 @@ int cli(int argc, char **argv) {
     char *message = argv[3];
 
     // Dynamically allocate the result buffer
-    char *result = malloc(strlen(message) + 1);
-    if (result == NULL) {
-        fprintf(stderr, "Failed to allocate memory for result\n");
-        return 1;
-    }
+    char * result = create_pointer(strlen(message));
 
     if (strcmp(operation, "caesar-encrypt") == 0) {
         caesar_encrypt('A', 'Z', atoi(key), message, result);
@@ -111,6 +115,8 @@ int cli(int argc, char **argv) {
         free(result);
         return 1;
     }
+
+    printf("%s\n", result);
 
     // Don't forget to free the result buffer when you're done with it
     wipe_memory(result);

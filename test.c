@@ -2,7 +2,7 @@
 #include "crypto.h"
 
 void test_cli() {
-    char *argv1[] = {"program", "caesar-encrypt", "3", "Hello, World!"};
+    char *argv1[] = {"program", "caesar-encrypt", "3", "Hello, World"};
     assert(cli(4, argv1) == 0);
 
     char *argv2[] = {"program", "caesar-decrypt", "3", "Khoor, Zruog!"};

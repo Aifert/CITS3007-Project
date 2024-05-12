@@ -1,4 +1,12 @@
-void check_null_pointer(void* ptr);
-void check_buffer_size(const char* input, char* output);
-char* secure_key(const char* key);
+#include <stddef.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+#include <stdint.h>
+#include <stdbool.h>
+#include <limits.h>
+
+char * create_pointer(size_t size);
+bool is_null_terminated(const char *str);
+void check_null_pointer(const char* ptr);
 void wipe_memory(char* key);

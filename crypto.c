@@ -91,7 +91,12 @@ int cli(int argc, char **argv) {
     char *key = argv[2];
     char *message = argv[3];
 
-    char result[1024] = {0};
+    // Dynamically allocate the result buffer
+    char *result = malloc(strlen(message) + 1);
+    if (result == NULL) {
+        fprintf(stderr, "Failed to allocate memory for result\n");
+        return 1;
+    }
 
     if (strcmp(operation, "caesar-encrypt") == 0) {
         caesar_encrypt('A', 'Z', atoi(key), message, result);
@@ -103,8 +108,12 @@ int cli(int argc, char **argv) {
         vigenere_decrypt('A', 'Z', key, message, result);
     } else {
         fprintf(stderr, "Invalid operation\n");
+        free(result);
         return 1;
     }
+
+    // Don't forget to free the result buffer when you're done with it
+    wipe_memory(result);
 
     return 0;
 }

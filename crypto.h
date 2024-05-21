@@ -137,7 +137,7 @@ void vigenere_decrypt(char range_low, char range_high, const char * key, const c
  * the message to encrypt or decrypt.
  *
  * @param argc The number of command-line arguments.
- * @param argv The command-line arguments.
+ * @param argv The command-line arguments, must be 3 arguments excluding the program name.
  * @return int Returns 0 if the operation was successful, or 1 if there was an error.
  */
 int cli(int argc, char ** argv);

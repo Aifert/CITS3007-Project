@@ -1,12 +1,17 @@
+#ifndef HELPER_H
+#define HELPER_H
+
 #include <stddef.h>
-#include <stdlib.h>
-#include <string.h>
 #include <stdio.h>
-#include <stdint.h>
 #include <stdbool.h>
+#include <string.h>
+#include <stdint.h>
+#include <stdlib.h>
 #include <limits.h>
 
-char * create_pointer(size_t size);
-bool is_null_terminated(const char *str);
-void check_null_pointer(const char* ptr);
-void wipe_memory(char* key);
+int is_null_terminated(const char *str);
+int check_null_pointer(const char* ptr);
+int is_valid_integer(char * key);
+int wipe_memory(char* key);
+
+#endif

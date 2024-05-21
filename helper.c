@@ -1,40 +1,49 @@
 #include "helper.h"
+#include "crypto.h"
 
-char * create_pointer(size_t size){
-    // Check for integer overflow and zero size
-    if (size >= SIZE_MAX || size == 0){
-        fprintf(stderr, "Invalid size\n");
-        printf("Size: %ld\n", size);
-        exit(EXIT_FAILURE);
-    }
-    char *ptr = malloc(size + 1);
-    if (ptr == NULL){
-        fprintf(stderr, "Memory allocation error\n");
-        exit(EXIT_FAILURE);
-    }
-    return ptr;
-}
-
-bool is_null_terminated(const char *str){
+int is_null_terminated(const char *str){
     for (size_t i = 0; i < SIZE_MAX; i++){
         if(str[i] == '\0'){
-            return true;
+            return 0;
         }
     }
     fprintf(stderr, "Not null terminated\n");
-    exit(EXIT_FAILURE);
+    return 1;
 }
 
-void check_null_pointer(const char* ptr) {
+int check_null_pointer(const char* ptr) {
     if (ptr == NULL) {
         fprintf(stderr, "Null pointer error\n");
-        exit(EXIT_FAILURE);
+        return 1;
     }
+    return 0;
 }
 
-void wipe_memory(char* key) {
+int wipe_memory(char* key) {
     if (key != NULL) {
         memset(key, 0, strlen(key));
         free(key);
     }
+    return 0;
+}
+
+int is_valid_integer(char *key) {
+    size_t i = 0;
+    if (key[0] == '-') {
+        if (strlen(key) == 1) {
+            return 0;
+        }
+        i = 1;
+    }
+    for (; i < strlen(key); i++) {
+        if (key[i] < '0' || key[i] > '9') {
+            return 0;
+        }
+    }
+
+    long value = atol(key);
+    if (value < INT_MIN || value > INT_MAX) {
+        return 0;
+    }
+    return 1;
 }

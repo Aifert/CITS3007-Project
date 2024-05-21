@@ -5,71 +5,67 @@
 #include "helper.h"
 
 void caesar_encrypt(char range_low, char range_high, int key, const char *plain_text, char *cipher_text) {
-    cipher_text[strlen(plain_text)] = '\0';
-
     size_t length = strlen(plain_text);
+    cipher_text[length] = '\0';
+
     int range = range_high - range_low + 1;
-    for (int i = 0; plain_text[i]; i++) {
+    for (size_t i = 0; plain_text[i]; i++) {
         if (plain_text[i] >= range_low && plain_text[i] <= range_high) {
-            cipher_text[i] = (char)(((plain_text[i] - range_low + key) % range + range) % range + range_low);
+            cipher_text[i] = (char)(((plain_text[i] - range_low + key) % range) + range_low);
         } else {
             cipher_text[i] = plain_text[i];
         }
     }
-
-    cipher_text[length] = '\0';
 }
 
 void caesar_decrypt(char range_low, char range_high, int key, const char *cipher_text, char *plain_text) {
-    plain_text[strlen(plain_text)] = '\0';
+    size_t length = strlen(cipher_text);
+    plain_text[length] = '\0';
 
     int range = range_high - range_low + 1;
-    for (int i = 0; cipher_text[i]; i++) {
+    for (size_t i = 0; cipher_text[i]; i++) {
         if (cipher_text[i] >= range_low && cipher_text[i] <= range_high) {
             int decrypted = ((cipher_text[i] - range_low - key) % range);
             if (decrypted < 0) decrypted += range;
-            plain_text[i] = decrypted + range_low;
+            plain_text[i] = (char)(decrypted + range_low);
         } else {
             plain_text[i] = cipher_text[i];
         }
     }
 }
 
-
 void vigenere_encrypt(char range_low, char range_high, const char *key, const char *plain_text, char *cipher_text) {
-    cipher_text[strlen(plain_text)] = '\0';
+    size_t length = strlen(plain_text);
+    cipher_text[length] = '\0';
 
     int range = range_high - range_low + 1;
+    size_t key_length = strlen(key);
     for (size_t i = 0; plain_text[i]; i++) {
         if (plain_text[i] >= range_low && plain_text[i] <= range_high) {
             int shift = key[i % key_length] - range_low;
-            cipher_text[i] = (char)(((plain_text[i] - range_low + shift) % range + range) % range + range_low);
+            cipher_text[i] = (char)(((plain_text[i] - range_low + shift) % range) + range_low);
         } else {
             cipher_text[i] = plain_text[i];
         }
     }
-
-    cipher_text[length] = '\0';
 }
 
-void vigenere_decrypt(char range_low, char range_high, const char *key, const char *cipher_text, char *plain_text) {
-    plain_text[strlen(plain_text)] = '\0';
 
+void vigenere_decrypt(char range_low, char range_high, const char *key, const char *cipher_text, char *plain_text) {
     size_t length = strlen(cipher_text);
+    plain_text[length] = '\0';
+
     size_t key_length = strlen(key);
     int range = range_high - range_low + 1;
     for (size_t i = 0; cipher_text[i]; i++) {
         if (cipher_text[i] >= range_low && cipher_text[i] <= range_high) {
             int shift = key[i % key_length] - range_low;
-            plain_text[i] = (char)(((cipher_text[i] - range_low - shift) % range + range) % range + range_low);
+            plain_text[i] = (char)(((cipher_text[i] - range_low - shift + range) % range) + range_low);
         } else {
             plain_text[i] = cipher_text[i];
         }
     }
-
-    plain_text[length] = '\0';
 }
-
 
 int cli(int argc, char **argv) {
     if (argc != 4) {
@@ -77,7 +73,7 @@ int cli(int argc, char **argv) {
         return 1;
     }
 
-    for(int i = 1; i < 4; i++){
+    for (int i = 1; i < 4; i++) {
         if (is_null_terminated(argv[i]) != 0) {
             fprintf(stderr, "Invalid Arguments\n");
             return 1;
@@ -95,32 +91,37 @@ int cli(int argc, char **argv) {
 
     size_t size = strlen(message);
 
-    if (size >= SIZE_MAX){
+    if (size >= SIZE_MAX) {
         fprintf(stderr, "Invalid size\n");
         return 1;
     }
 
-
     char *result = malloc(size + 1);
-    if (result == NULL){
+    if (result == NULL) {
         fprintf(stderr, "Memory allocation error\n");
         return 1;
     }
 
-    if (strcmp(operation, "caesar-encrypt") == 0) {
-        if (is_valid_integer(key)){
-            caesar_encrypt('A', 'Z', atol(key), message, result);
-        }
-        else{
+    if (strcmp(operation, "caesar-encrypt") == 0 || strcmp(operation, "caesar-decrypt") == 0) {
+        if (is_valid_integer(key)) {
+            char *endptr;
+            long key_value = strtol(key, &endptr, 10);
+            if (key_value < INT_MIN || key_value > INT_MAX || *endptr != '\0') {
+                fprintf(stderr, "Invalid key\n");
+                free(result);
+                return 1;
+            }
+
+            int int_key = (int)key_value;
+
+            if (strcmp(operation, "caesar-encrypt") == 0) {
+                caesar_encrypt('A', 'Z', int_key, message, result);
+            } else {
+                caesar_decrypt('A', 'Z', int_key, message, result);
+            }
+        } else {
             fprintf(stderr, "Invalid key\n");
-            return 1;
-        }
-    } else if (strcmp(operation, "caesar-decrypt") == 0) {
-        if (is_valid_integer(key)){
-            caesar_decrypt('A', 'Z', atol(key), message, result);
-        }
-        else{
-            fprintf(stderr, "Invalid key\n");
+            free(result);
             return 1;
         }
     } else if (strcmp(operation, "vigenere-encrypt") == 0) {

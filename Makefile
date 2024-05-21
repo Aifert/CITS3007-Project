@@ -1,15 +1,15 @@
 CC=gcc
-CFLAGS=-I.
+CFLAGS = -Wall -Wextra -Wconversion -pedantic-errors -g -fsanitize=undefined,address
 DEPS = cli.h
-OBJ = main.o test.o
+OBJ = crypto.o test.o helper.o
 
 %.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-main: $(OBJ)
+crypto: $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS)
 
 .PHONY: clean
 
 clean:
-	rm -f *.o main
+	rm -f *.o crypto

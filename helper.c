@@ -30,14 +30,3 @@ void wipe_memory(char *ptr) {
         free(ptr);
     }
 }
-
-void check_valid_key(char range_low, char range_high, int key){
-    if (range_low > range_high) {
-        fprintf(stderr, "Invalid range\n");
-        exit(1);
-    }
-    if (key < 0 || key > (range_high - range_low)) {
-        fprintf(stderr, "Invalid key\n");
-        exit(1);
-    }
-}

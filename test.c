@@ -8,10 +8,10 @@ void test_cli(void) {
     char *argv2[] = {"program", "caesar-decrypt", "3", "Khoor, Zruog!"};
     assert(cli(4, argv2) == 0);
 
-    char *argv3[] = {"program", "vigenere-encrypt", "key", "Hello, World"};
+    char *argv3[] = {"program", "vigenere-encrypt", "abcd&", "Hello, World"};
     assert(cli(4, argv3) == 0);
 
-    char *argv4[] = {"program", "vigenere-decrypt", "key", "Rijvs, Ubtw"};
+    char *argv4[] = {"program", "vigenere-decrypt", "abcd&", "Nello, Eorld"};
     assert(cli(4, argv4) == 0);
 
     char *argv5[] = {"program", "invalid-operation", "3", "Hello, Worl"};

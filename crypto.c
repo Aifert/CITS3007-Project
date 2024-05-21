@@ -5,12 +5,8 @@
 #include "helper.h"
 
 void caesar_encrypt(char range_low, char range_high, int key, const char *plain_text, char *cipher_text) {
-    check_valid_key(range_low, range_high, key);
 
-    is_null_terminated(plain_text);
 
-    check_null_pointer(plain_text);
-    check_null_pointer(cipher_text);
 
     cipher_text[strlen(plain_text)] = '\0';
 
@@ -28,26 +24,7 @@ void caesar_encrypt(char range_low, char range_high, int key, const char *plain_
 }
 
 void caesar_decrypt(char range_low, char range_high, int key, const char *cipher_text, char *plain_text) {
-    // Ensure valid key and null-terminated strings
-    check_valid_key(range_low, range_high, key);
-    is_null_terminated(cipher_text);
-
-    // Check for null pointers
-    check_null_pointer(cipher_text);
-    check_null_pointer(plain_text);
-
-    size_t length = strlen(cipher_text);
-    int range = range_high - range_low + 1;
-
-    for (size_t i = 0; i < length; i++) {
-        if (cipher_text[i] >= range_low && cipher_text[i] <= range_high) {
-            plain_text[i] = (char)(((cipher_text[i] - range_low - key + range) % range + range) % range + range_low);
-        } else {
-            plain_text[i] = cipher_text[i];
-        }
-    }
-
-    plain_text[length] = '\0';
+    caesar_encrypt(range_low, range_high, -key, cipher_text, plain_text);
 }
 
 
@@ -101,6 +78,7 @@ void vigenere_decrypt(char range_low, char range_high, const char *key, const ch
 
 int cli(int argc, char **argv) {
     if (argc != 4) {
+        fprintf(stderr, "Invalid number of arguments\n");
         return 1;
     }
 
@@ -128,6 +106,8 @@ int cli(int argc, char **argv) {
         free(result);
         return 1;
     }
+
+    printf("%s\n", result);
 
     wipe_memory(result);
 

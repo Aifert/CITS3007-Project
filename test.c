@@ -1,8 +1,8 @@
 #include <assert.h>
 #include "crypto.h"
 
-void test_cli() {
-    char *argv1[] = {"program", "caesar-encrypt", "3", "Hello, World"};
+void test_cli(void) {
+    char *argv1[] = {"program", "caesar-encrypt", "3", "HelloWorld"};
     assert(cli(4, argv1) == 0);
 
     char *argv2[] = {"program", "caesar-decrypt", "3", "Khoor, Zruog!"};
@@ -21,7 +21,7 @@ void test_cli() {
     assert(cli(3, argv6) == 1);
 }
 
-int main() {
+int main(void) {
     test_cli();
     return 0;
 }

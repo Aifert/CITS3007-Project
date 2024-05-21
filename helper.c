@@ -1,28 +1,20 @@
 #include "helper.h"
 
-char * create_pointer(size_t size){
-    // Check for integer overflow and zero size
-    if (size >= SIZE_MAX || size == 0){
-        fprintf(stderr, "Invalid size\n");
-        printf("Size: %ld\n", size);
-        exit(EXIT_FAILURE);
+char* create_pointer(size_t size) {
+    char *ptr = (char *)malloc(size + 1);
+    if (ptr == NULL) {
+        fprintf(stderr, "Memory allocation failed\n");
+        exit(1);
     }
-    char *ptr = malloc(size + 1);
-    if (ptr == NULL){
-        fprintf(stderr, "Memory allocation error\n");
-        exit(EXIT_FAILURE);
-    }
+    ptr[size] = '\0';
     return ptr;
 }
 
-bool is_null_terminated(const char *str){
-    for (size_t i = 0; i < SIZE_MAX; i++){
-        if(str[i] == '\0'){
-            return true;
-        }
+void is_null_terminated(const char *str) {
+    if (str == NULL || str[strlen(str)] != '\0') {
+        fprintf(stderr, "String is not null terminated\n");
+        exit(1);
     }
-    fprintf(stderr, "Not null terminated\n");
-    exit(EXIT_FAILURE);
 }
 
 void check_null_pointer(const char* ptr) {
@@ -32,9 +24,20 @@ void check_null_pointer(const char* ptr) {
     }
 }
 
-void wipe_memory(char* key) {
-    if (key != NULL) {
-        memset(key, 0, strlen(key));
-        free(key);
+void wipe_memory(char *ptr) {
+    if (ptr != NULL) {
+        memset(ptr, 0, strlen(ptr));
+        free(ptr);
+    }
+}
+
+void check_valid_key(char range_low, char range_high, int key){
+    if (range_low > range_high) {
+        fprintf(stderr, "Invalid range\n");
+        exit(1);
+    }
+    if (key < 0 || key > (range_high - range_low)) {
+        fprintf(stderr, "Invalid key\n");
+        exit(1);
     }
 }

@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-I. -D_FORTIFY_SOURCE=2 -fstack-protector-strong -Wl,-z,relro,-z,now -Wl,-z,noexecstack -fPIE -pie -Wformat -Wformat-security -Werror=format-security
+CFLAGS = -Wall -Wextra -Wconversion -pedantic-errors -g -fsanitize=undefined,address
 DEPS = cli.h
 OBJ = crypto.o test.o helper.o
 

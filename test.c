@@ -80,7 +80,7 @@ void test_cli() {
     assert(cli(4, argv23) == 1); // Should fail due to integer overflow
 }
 
-int main() {
+int main(void) {
     test_cli();
     return 0;
 }

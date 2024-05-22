@@ -14,6 +14,13 @@ void caesar_encrypt(char range_low, char range_high, int key, const char *plain_
     cipher_text[length] = '\0';
 
     int range = range_high - range_low + 1;
+
+    if (key < 0) {
+        key = (key % range + range) % range;
+    } else {
+        key = key % range;
+    }
+
     for (size_t i = 0; plain_text[i]; i++) {
         if (plain_text[i] >= range_low && plain_text[i] <= range_high) {
             cipher_text[i] = (char)(((plain_text[i] - range_low + key) % range) + range_low);
@@ -22,7 +29,6 @@ void caesar_encrypt(char range_low, char range_high, int key, const char *plain_
         }
     }
 }
-
 void caesar_decrypt(char range_low, char range_high, int key, const char *cipher_text, char *plain_text) {
     size_t length = strlen(cipher_text);
     plain_text[length] = '\0';
@@ -45,10 +51,13 @@ void vigenere_encrypt(char range_low, char range_high, const char *key, const ch
 
     int range = range_high - range_low + 1;
     size_t key_length = strlen(key);
+    size_t key_index = 0;
+
     for (size_t i = 0; plain_text[i]; i++) {
         if (plain_text[i] >= range_low && plain_text[i] <= range_high) {
-            int shift = key[i % key_length] - range_low;
+            int shift = key[key_index % key_length] - range_low;
             cipher_text[i] = (char)(((plain_text[i] - range_low + shift) % range) + range_low);
+            key_index++;
         } else {
             cipher_text[i] = plain_text[i];
         }

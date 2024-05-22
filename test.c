@@ -45,10 +45,10 @@ void test_cli() {
 
     // Large Caesar key (testing wrap-around)
     char *argv12[] = {"program", "caesar-encrypt", "100", "HELLO, WORLD"};
-    assert(cli(4, argv12) == 0);
+    assert(cli(4, argv12) == 1);
 
     char *argv13[] = {"program", "caesar-decrypt", "100", "DASSI, VMIPL!"};
-    assert(cli(4, argv13) == 0);
+    assert(cli(4, argv13) == 1);
 
     // Negative Caesar key
     char *argv14[] = {"program", "caesar-encrypt", "-3", "HELLO, WORLD"};
@@ -58,8 +58,8 @@ void test_cli() {
     assert(cli(4, argv15) == 0);
 
     // Vigenere key with special characters
-    char *argv16[] = {"program", "vigenere-encrypt", "K3Y!", "HELLO, WORLD"};
-    assert(cli(4, argv16) == 0);
+    char *argv16[] = {"program", "vigenere-encrypt", "####()()()()()(@@@@@", "HELLO, WORLD"};
+    assert(cli(4, argv16) == 1);
 
     char *argv17[] = {"program", "vigenere-decrypt", "K3Y!", "RIJVS, UYVJN!"};
     assert(cli(4, argv17) == 0);

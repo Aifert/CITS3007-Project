@@ -88,6 +88,8 @@ int cli(int argc, char **argv) {
     char *operation = argv[1];
     char *key = argv[2];
     char *message = argv[3];
+    char range_low = 'A';
+    char range_high = 'Z';
 
     size_t size = strlen(message);
 
@@ -103,9 +105,7 @@ int cli(int argc, char **argv) {
     }
 
     if (strcmp(operation, "caesar-encrypt") == 0 || strcmp(operation, "caesar-decrypt") == 0) {
-        char range_low = 'A';
-        char range_high = 'Z';
-        if (is_valid_key(key, range_low, range_high)) {
+        if (is_valid_key_caeser(key, range_low, range_high)) {
             char *endptr;
             long key_value = strtol(key, &endptr, 10);
             if (key_value < INT_MIN || key_value > INT_MAX || *endptr != '\0') {
@@ -126,10 +126,21 @@ int cli(int argc, char **argv) {
             free(result);
             return 1;
         }
-    } else if (strcmp(operation, "vigenere-encrypt") == 0) {
-        vigenere_encrypt('A', 'Z', key, message, result);
-    } else if (strcmp(operation, "vigenere-decrypt") == 0) {
-        vigenere_decrypt('A', 'Z', key, message, result);
+    } else if (strcmp(operation, "vigenere-encrypt") == 0 || strcmp(operation, "vigenere-decrypt") == 0) {
+        if(is_valid_key_vigenere(key, range_low, range_high)){
+
+            if (strcmp(operation, "vigenere-encrypt") == 0) {
+            vigenere_encrypt(range_low, range_high, key, message, result);
+            }
+            else{
+                vigenere_decrypt(range_low, range_high, key, message, result);
+            }
+        }
+        else {
+            fprintf(stderr, "Invalid key\n");
+            free(result);
+            return 1;
+        }
     } else {
         fprintf(stderr, "Invalid operation\n");
         free(result);

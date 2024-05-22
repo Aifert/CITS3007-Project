@@ -47,3 +47,17 @@ int is_valid_integer(char *key) {
     }
     return 1;
 }
+
+
+int is_valid_key(char * key, char range_low, char range_high){
+    long value = atol(key);
+    if (value < (range_low - range_high) || value > (range_high - range_low)) {
+        return 0;
+    }
+
+    if(!is_valid_integer(key)){
+        return 0;
+    }
+
+    return 1;
+}

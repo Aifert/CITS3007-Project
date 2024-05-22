@@ -103,7 +103,9 @@ int cli(int argc, char **argv) {
     }
 
     if (strcmp(operation, "caesar-encrypt") == 0 || strcmp(operation, "caesar-decrypt") == 0) {
-        if (is_valid_integer(key)) {
+        char range_low = 'A';
+        char range_high = 'Z';
+        if (is_valid_key(key, range_low, range_high)) {
             char *endptr;
             long key_value = strtol(key, &endptr, 10);
             if (key_value < INT_MIN || key_value > INT_MAX || *endptr != '\0') {
@@ -115,9 +117,9 @@ int cli(int argc, char **argv) {
             int int_key = (int)key_value;
 
             if (strcmp(operation, "caesar-encrypt") == 0) {
-                caesar_encrypt('A', 'Z', int_key, message, result);
+                caesar_encrypt(range_low, range_high, int_key, message, result);
             } else {
-                caesar_decrypt('A', 'Z', int_key, message, result);
+                caesar_decrypt(range_low, range_high, int_key, message, result);
             }
         } else {
             fprintf(stderr, "Invalid key\n");

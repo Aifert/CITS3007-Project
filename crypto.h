@@ -43,7 +43,8 @@
   * \pre `plain_text` must be a valid null-terminated C string
   * \pre `cipher_text` must point to a buffer of identical length to `plain_text`
   * \pre `range_high` must be strictly greater than `range_low`.
-  * \pre `key` must fall within range from 0 to `(range_high - range_low)`, inclusive.
+  * \pre `key` must fall within the range from `(range_low - range_high)` to
+  *      `(range_high - range_low)`, inclusive.
   */
 void caesar_encrypt(char range_low, char range_high, int key, const char * plain_text, char * cipher_text);
 
@@ -66,7 +67,8 @@ void caesar_encrypt(char range_low, char range_high, int key, const char * plain
   * \pre `cipher_text` must be a valid null-terminated C string
   * \pre `plain_text` must point to a buffer of identical length to `cipher_text`
   * \pre `range_high` must be strictly greater than `range_low`.
-  * \pre `key` must fall within range from 0 to `(range_high - range_low)`, inclusive.
+  * \pre `key` must fall within range from `(range_low - range_high)` to
+  *      `(range_high - range_low)`, inclusive.
   */
 void caesar_decrypt(char range_low, char range_high, int key, const char * cipher_text, char * plain_text);
 
@@ -97,7 +99,8 @@ void caesar_decrypt(char range_low, char range_high, int key, const char * ciphe
   * \pre `plain_text` must be a valid null-terminated C string
   * \pre `cipher_text` must point to a buffer of identical length to `plain_text`
   * \pre `range_high` must be strictly greater than `range_low`.
-  * \pre `key` must not be an empty string.
+  * \pre `key` must not be an empty string, and all characters in `key` must be within
+  *        the range from `range_low` to `range_high` (inclusive).
   */
 
 void vigenere_encrypt(char range_low, char range_high, const char *key,
@@ -123,9 +126,12 @@ void vigenere_encrypt(char range_low, char range_high, const char *key,
   * \pre `cipher_text` must be a valid null-terminated C string
   * \pre `plain_text` must point to a buffer of identical length to `cipher_text`
   * \pre `range_high` must be strictly greater than `range_low`.
-  * \pre `key` must not be an empty string.
+  * \pre `key` must not be an empty string, and all characters in `key` must be within
+  *        the range from `range_low` to `range_high` (inclusive).
   */
-void vigenere_decrypt(char range_low, char range_high, const char * key, const char * cipher_text, char * plain_text);
+void vigenere_decrypt(char range_low, char range_high, const char *key,
+                      const char *cipher_text, char *plain_text
+);
 
 /**
  * @brief Command-line interface for encryption and decryption operations.

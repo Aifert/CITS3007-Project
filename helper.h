@@ -1,14 +1,6 @@
 #ifndef HELPER_H
 #define HELPER_H
 
-#include <stddef.h>
-#include <stdio.h>
-#include <stdbool.h>
-#include <string.h>
-#include <stdint.h>
-#include <stdlib.h>
-#include <limits.h>
-
 /**
  * Checks if a string is null-terminated.
  *
@@ -31,7 +23,7 @@ int check_null_pointer(const char* ptr);
  * @param key The string to check.
  * @return 1 if the string is a valid integer, 0 otherwise.
  */
-int is_valid_integer(char * key);
+int is_valid_integer(const char * key);
 
 /**
  * Wipes a string from memory by setting all its characters to 0 and then freeing it.
@@ -49,7 +41,7 @@ int wipe_memory(char* key);
  * @param range_high The upper bound of the valid range.
  * @return 1 if the string is a valid key, 0 otherwise.
  */
-int is_valid_key_caeser(char * key, char range_low, char range_high);
+int is_valid_key_caeser(const char * key, char range_low, char range_high);
 
 /**
  * Checks if a string is a valid key for a Vigenere cipher.
@@ -59,6 +51,6 @@ int is_valid_key_caeser(char * key, char range_low, char range_high);
  * @param range_high The upper bound of the valid range.
  * @return 1 if the string is a valid key, 0 otherwise.
  */
-int is_valid_key_vigenere(char * key, char range_low, char range_high);
+int is_valid_key_vigenere(const char * key, char range_low, char range_high);
 
 #endif

@@ -1,8 +1,13 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdint.h>
+#include <limits.h>
 #include "crypto.h"
 #include "helper.h"
+
+#define RANGE_LOW 'A'
+#define RANGE_HIGH 'Z'
 
 void caesar_encrypt(char range_low, char range_high, int key, const char *plain_text, char *cipher_text) {
     size_t length = strlen(plain_text);
@@ -50,7 +55,6 @@ void vigenere_encrypt(char range_low, char range_high, const char *key, const ch
     }
 }
 
-
 void vigenere_decrypt(char range_low, char range_high, const char *key, const char *cipher_text, char *plain_text) {
     size_t length = strlen(cipher_text);
     plain_text[length] = '\0';
@@ -85,12 +89,9 @@ int cli(int argc, char **argv) {
         }
     }
 
-    char *operation = argv[1];
-    char *key = argv[2];
-    char *message = argv[3];
-    char range_low = 'A';
-    char range_high = 'Z';
-
+    const char *operation = argv[1];
+    const char *key = argv[2];
+    const char *message = argv[3];
     size_t size = strlen(message);
 
     if (size >= SIZE_MAX) {
@@ -105,7 +106,7 @@ int cli(int argc, char **argv) {
     }
 
     if (strcmp(operation, "caesar-encrypt") == 0 || strcmp(operation, "caesar-decrypt") == 0) {
-        if (is_valid_key_caeser(key, range_low, range_high)) {
+        if (is_valid_key_caeser(key, RANGE_LOW, RANGE_HIGH)) {
             char *endptr;
             long key_value = strtol(key, &endptr, 10);
             if (key_value < INT_MIN || key_value > INT_MAX || *endptr != '\0') {
@@ -117,9 +118,9 @@ int cli(int argc, char **argv) {
             int int_key = (int)key_value;
 
             if (strcmp(operation, "caesar-encrypt") == 0) {
-                caesar_encrypt(range_low, range_high, int_key, message, result);
+                caesar_encrypt(RANGE_LOW, RANGE_HIGH, int_key, message, result);
             } else {
-                caesar_decrypt(range_low, range_high, int_key, message, result);
+                caesar_decrypt(RANGE_LOW, RANGE_HIGH, int_key, message, result);
             }
         } else {
             fprintf(stderr, "Invalid key\n");
@@ -127,16 +128,13 @@ int cli(int argc, char **argv) {
             return 1;
         }
     } else if (strcmp(operation, "vigenere-encrypt") == 0 || strcmp(operation, "vigenere-decrypt") == 0) {
-        if(is_valid_key_vigenere(key, range_low, range_high)){
-
+        if (is_valid_key_vigenere(key, RANGE_LOW, RANGE_HIGH)) {
             if (strcmp(operation, "vigenere-encrypt") == 0) {
-            vigenere_encrypt(range_low, range_high, key, message, result);
+                vigenere_encrypt(RANGE_LOW, RANGE_HIGH, key, message, result);
+            } else {
+                vigenere_decrypt(RANGE_LOW, RANGE_HIGH, key, message, result);
             }
-            else{
-                vigenere_decrypt(range_low, range_high, key, message, result);
-            }
-        }
-        else {
+        } else {
             fprintf(stderr, "Invalid key\n");
             free(result);
             return 1;
@@ -148,7 +146,6 @@ int cli(int argc, char **argv) {
     }
 
     printf("%s\n", result);
-
     wipe_memory(result);
 
     return 0;

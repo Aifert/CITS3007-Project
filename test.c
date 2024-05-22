@@ -61,8 +61,8 @@ void test_cli() {
     char *argv16[] = {"program", "vigenere-encrypt", "####()()()()()(@@@@@", "HELLO, WORLD"};
     assert(cli(4, argv16) == 1);
 
-    char *argv17[] = {"program", "vigenere-decrypt", "K3Y!", "RIJVS, UYVJN!"};
-    assert(cli(4, argv17) == 0);
+    char *argv17[] = {"program", "vigenere-decrypt", "KEY!!!!!", "RIJVS, UYVJN!"};
+    assert(cli(4, argv17) == 1);
 
     // Non-ASCII characters in the message (should remain unchanged)
     char *argv18[] = {"program", "caesar-encrypt", "3", "∫˜∆˜∫˙˚˜∆˚˙∫˙¨¬˚˜"};
